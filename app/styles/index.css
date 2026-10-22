@@ -1,16 +1,16 @@
 @font-face {
   font-family: "Press Start 2P";
-  src: url(~assets/fonts/PressStart2P-Regular.ttf)  format("truetype");
+  src: url(../assets/fonts/PressStart2P-Regular.ttf) format("truetype");
 }
 
 body, html {
-    font-family: "Press Start 2P", sans-serif;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    padding: 0;
-    margin: 0;
-    background: black;
+  font-family: "Press Start 2P", sans-serif;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+  background: black;
 }
 
 body {
@@ -27,12 +27,12 @@ button {
   box-shadow: none;
   border: none;
   cursor: pointer;
+}
 
-  &:focus {
-    border: none;
-    box-shadow: none;
-    outline: none;
-  }
+button:focus {
+  border: none;
+  box-shadow: none;
+  outline: none;
 }
 
 .instructions-container {
@@ -42,21 +42,19 @@ button {
   z-index: 100;
   text-align: center;
   display: none;
-
-  .instructions {
-    margin-top: 100px;
-    max-width: 900px;
-    width: 100%;
-    height: 600px;
-    display: inline-block;
-    border: 0;
-  }
 }
 
-body.show-instructions {
-  .instructions-container {
-    display: block;
-  }
+.instructions-container .instructions {
+  margin-top: 100px;
+  max-width: 900px;
+  width: 100%;
+  height: 600px;
+  display: inline-block;
+  border: 0;
+}
+
+body.show-instructions .instructions-container {
+  display: block;
 }
 
 .background {
@@ -67,15 +65,15 @@ body.show-instructions {
   right: 0;
   z-index: 0;
   opacity: 0.5;
-  background-image: url(~assets/images/logo.png);
+  background-image: url(../assets/images/logo.png);
   background-position: 50% 50%;
   background-repeat: no-repeat;
   background-size: 520px 476px;
+}
 
-  .power-mode & {
-    background-image: url(~assets/images/logo-power.png);
-    animation: background-power 2s infinite both;
-  }
+.power-mode .background {
+  background-image: url(../assets/images/logo-power.png);
+  animation: background-power 2s infinite both;
 }
 
 .canvas-overlay {
@@ -96,61 +94,59 @@ body.show-instructions {
   background: transparent;
   font-size: 14px;
   transform: translate3d(0, 0, 0);
-
-  .ace_keyword,
-  .ace_meta,
-  .ace_fold,
-  .ace_entity.ace_name.ace_function,
-  .ace_support.ace_function,
-  .ace_variable {
-    color: #00FF79;
-  }
-
-  .ace_comment {
-    color: #0DFDFF;
-    display: inline-block;
-    animation: grow 1.5s infinite both;
-  }
-
-  .ace_gutter {
-    background: rgba(0,0,0,0.5);
-  }
-
-  .ace_constant,
-  .ace_constant.ace_character,
-  .ace_constant.ace_character.ace_escape,
-  .ace_constant.ace_other,
-  .ace_string {
-    color: #F9FF00;
-    animation: pulse 1.5s infinite both;
-  }
 }
 
-body.power-mode #editor {
-  .ace_keyword,
-  .ace_meta,
-  .ace_fold,
-  .ace_entity.ace_name.ace_function,
-  .ace_support.ace_function,
-  .ace_variable {
-    color: #00DDFF;
-  }
+#editor .ace_keyword,
+#editor .ace_meta,
+#editor .ace_fold,
+#editor .ace_entity.ace_name.ace_function,
+#editor .ace_support.ace_function,
+#editor .ace_variable {
+  color: #00FF79;
+}
 
-  .ace_comment {
-    color: #00FF79;
-  }
+#editor .ace_comment {
+  color: #0DFDFF;
+  display: inline-block;
+  animation: grow 1.5s infinite both;
+}
 
-  .ace_constant,
-  .ace_constant.ace_character,
-  .ace_constant.ace_character.ace_escape,
-  .ace_constant.ace_other,
-  .ace_string {
-    color: #F9FF00;
-  }
+#editor .ace_gutter {
+  background: rgba(0,0,0,0.5);
+}
 
-  .ace_entity.ace_other.ace_attribute-name {
-    color: #8194F4;
-  }
+#editor .ace_constant,
+#editor .ace_constant.ace_character,
+#editor .ace_constant.ace_character.ace_escape,
+#editor .ace_constant.ace_other,
+#editor .ace_string {
+  color: #F9FF00;
+  animation: pulse 1.5s infinite both;
+}
+
+body.power-mode #editor .ace_keyword,
+body.power-mode #editor .ace_meta,
+body.power-mode #editor .ace_fold,
+body.power-mode #editor .ace_entity.ace_name.ace_function,
+body.power-mode #editor .ace_support.ace_function,
+body.power-mode #editor .ace_variable {
+  color: #00DDFF;
+}
+
+body.power-mode #editor .ace_comment {
+  color: #00FF79;
+}
+
+body.power-mode #editor .ace_constant,
+body.power-mode #editor .ace_constant.ace_character,
+body.power-mode #editor .ace_constant.ace_character.ace_escape,
+body.power-mode #editor .ace_constant.ace_other,
+body.power-mode #editor .ace_string {
+  color: #F9FF00;
+}
+
+body.power-mode #editor .ace_entity.ace_other.ace_attribute-name {
+  color: #8194F4;
 }
 
 .streak-container {
@@ -159,51 +155,51 @@ body.power-mode #editor {
   right: 20px;
   top: 20px;
   text-align: right;
+}
 
-  .current {
-    color: white;
-    font-size: 16px;
-  }
+.streak-container .current {
+  color: white;
+  font-size: 16px;
+}
 
-  .bar {
-    position: relative;
-    opacity: 0.5;
-    margin-top: 23px;
-    height: 8px;
-    background: #4EFFA1;
-    width: 100%;
-    transform: scaleX(0);
-  }
+.streak-container .bar {
+  position: relative;
+  opacity: 0.5;
+  margin-top: 23px;
+  height: 8px;
+  background: #4EFFA1;
+  width: 100%;
+  transform: scaleX(0);
+}
 
-  .counter {
-    font-size: 80px;
-    color: #4EFFA1;
-    padding-top: 30px;
+.streak-container .counter {
+  font-size: 80px;
+  color: #4EFFA1;
+  padding-top: 30px;
+}
 
-    &.bump {
-      animation: grow 0.25s both;
-    }
-  }
+.streak-container .counter.bump {
+  animation: grow 0.25s both;
+}
 
-  .exclamations {
-    position: absolute;
-    bottom: -20px;
-    right: 0;
-    display: block;
-    color: #4EFFA1;
-    opacity: 0.75;
-    font-size: 20px;
-    text-align: right;
+.streak-container .exclamations {
+  position: absolute;
+  bottom: -20px;
+  right: 0;
+  display: block;
+  color: #4EFFA1;
+  opacity: 0.75;
+  font-size: 20px;
+  text-align: right;
+}
 
-    .exclamation {
-      right: 0;
-      top: 0;
-      display: block;
-      position: absolute;
-      min-width: 200px;
-      animation: exclamation 1.5s ease-out both;
-    }
-  }
+.streak-container .exclamations .exclamation {
+  right: 0;
+  top: 0;
+  display: block;
+  position: absolute;
+  min-width: 200px;
+  animation: exclamation 1.5s ease-out both;
 }
 
 .button-bar {
@@ -232,34 +228,34 @@ body.power-mode #editor {
   text-align: right;
   font-size: 12px;
   box-sizing: border-box;
+}
 
-  .reference-screenshot {
-    width: 200px;
-    height: 160px;
-    margin-top: 15px;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: 50% 50%;
-  }
+.reference-screenshot-container .reference-screenshot {
+  width: 200px;
+  height: 160px;
+  margin-top: 15px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+}
 
-  &.active {
-    width: 100%;
-    height: 100%;
-    bottom: 0;
-    left: 0;
-    padding: 25px;
+.reference-screenshot-container.active {
+  width: 100%;
+  height: 100%;
+  bottom: 0;
+  left: 0;
+  padding: 25px;
+}
 
-    .reference-screenshot {
-      width: 100%;
-      height: 100%;
-      margin-top: 0;
-      background-size: contain;
-    }
+.reference-screenshot-container.active .reference-screenshot {
+  width: 100%;
+  height: 100%;
+  margin-top: 0;
+  background-size: contain;
+}
 
-    span {
-      display: none;
-    }
-  }
+.reference-screenshot-container.active span {
+  display: none;
 }
 
 .name-tag {
@@ -268,14 +264,14 @@ body.power-mode #editor {
   bottom: 20px;
   left: 20px;
   padding: 20px;
-  background: transparentize(#3A9364, 0.25);
+  background: rgba(58, 147, 100, 0.75);
   color: white;
   font-size: 56px;
+}
 
-  &:hover {
-    cursor: pointer;
-    opacity: 0.8;
-  }
+.name-tag:hover {
+  cursor: pointer;
+  opacity: 0.8;
 }
 
 .power-mode-indicator {
@@ -287,12 +283,12 @@ body.power-mode #editor {
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.25s;
+}
 
-  h1 {
-    font-size: 40px;
-    margin: 0;
-    color: #00DDFF;
-  }
+.power-mode-indicator h1 {
+  font-size: 40px;
+  margin: 0;
+  color: #00DDFF;
 }
 
 .result {
@@ -306,33 +302,29 @@ body.power-mode #editor {
   left: 0;
 }
 
-body.power-mode {
-  .power-mode-indicator {
-    opacity: 1;
-    animation: power-mode-indicator 750ms linear both;
-  }
+body.power-mode .power-mode-indicator {
+  opacity: 1;
+  animation: power-mode-indicator 750ms linear both;
+}
 
-  .name-tag {
-    background: transparentize(#00DDFF, 0.25);
-  }
+body.power-mode .name-tag {
+  background: rgba(0, 221, 255, 0.75);
+}
 
-  .streak-container {
-    .counter {
-      color: #00DDFF;
-    }
+body.power-mode .streak-container .counter {
+  color: #00DDFF;
+}
 
-    .bar {
-      background: #00DDFF;
-    }
-  }
+body.power-mode .streak-container .bar {
+  background: #00DDFF;
+}
 
-  button {
-    background: #3A5A93;
-  }
+body.power-mode button {
+  background: #3A5A93;
+}
 
-  .exclamations .exclamation {
-    color: #00DDFF;
-  }
+body.power-mode .exclamations .exclamation {
+  color: #00DDFF;
 }
 
 @keyframes pulse {
