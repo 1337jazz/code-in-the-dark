@@ -75,18 +75,18 @@ class App {
     this.onClickReference = this.onClickReference.bind(this);
     this.onClickFinish = this.onClickFinish.bind(this);
     this.onChange = this.onChange.bind(this);
-    this.$streakCounter = $(".streak-container .counter");
-    this.$streakBar = $(".streak-container .bar");
-    this.$exclamations = $(".streak-container .exclamations");
-    this.$reference = $(".reference-screenshot-container");
-    this.$nameTag = $(".name-tag");
-    this.$result = $(".result");
-    this.$editor = $("#editor");
+    this.$streakCounter = document.querySelector(".streak-container .counter");
+    this.$streakBar = document.querySelector(".streak-container .bar");
+    this.$exclamations = document.querySelector(".streak-container .exclamations");
+    this.$reference = document.querySelector(".reference-screenshot-container");
+    this.$nameTag = document.querySelector(".name-tag");
+    this.$result = document.querySelector(".result");
+    this.$editor = document.querySelector("#editor");
     this.canvas = this.setupCanvas();
     this.canvasContext = this.canvas.getContext("2d");
-    this.$finish = $(".finish-button");
+    this.$finish = document.querySelector(".finish-button");
 
-    this.$body = $("body");
+    this.$body = document.body;
 
     this.debouncedSaveContent = _.debounce(this.saveContent, 300);
     this.debouncedEndStreak = _.debounce(this.endStreak, this.STREAK_TIMEOUT);
@@ -100,15 +100,17 @@ class App {
     this.editor.focus();
 
     this.editor.getSession().on("change", this.onChange);
-    $(window).on("beforeunload", () => "Hold your horses!");
+    window.addEventListener("beforeunload", (e) => {
+      e.preventDefault();
+      e.returnValue = "Hold your horses!";
+    });
 
-    $(".instructions-container, .instructions-button").on(
-      "click",
-      this.onClickInstructions,
-    );
-    this.$reference.on("click", this.onClickReference);
-    this.$finish.on("click", this.onClickFinish);
-    this.$nameTag.on("click", () => this.getName(true));
+    document
+      .querySelectorAll(".instructions-container, .instructions-button")
+      .forEach((el) => el.addEventListener("click", this.onClickInstructions));
+    this.$reference.addEventListener("click", this.onClickReference);
+    this.$finish.addEventListener("click", this.onClickFinish);
+    this.$nameTag.addEventListener("click", () => this.getName(true));
 
     this.getName();
 
@@ -133,7 +135,7 @@ class App {
   }
 
   setupCanvas() {
-    const canvas = $(".canvas-overlay")[0];
+    const canvas = document.querySelector(".canvas-overlay");
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     return canvas;
@@ -144,7 +146,7 @@ class App {
       (!forceUpdate && localStorage["name"]) || prompt("What's your name?");
     localStorage["name"] = name;
     if (name) {
-      return this.$nameTag.text(name);
+      return (this.$nameTag.textContent = name);
     }
   }
 
@@ -196,33 +198,28 @@ class App {
   }
 
   renderStreak() {
-    this.$streakCounter.text(this.currentStreak).removeClass("bump");
+    this.$streakCounter.textContent = this.currentStreak;
+    this.$streakCounter.classList.remove("bump");
 
     return _.defer(() => {
-      return this.$streakCounter.addClass("bump");
+      return this.$streakCounter.classList.add("bump");
     });
   }
 
   refreshStreakBar() {
-    this.$streakBar.css({
-      "webkit-transform": "scaleX(1)",
-      transform: "scaleX(1)",
-      transition: "none",
-    });
+    this.$streakBar.style.transform = "scaleX(1)";
+    this.$streakBar.style.transition = "none";
 
     return _.defer(() => {
-      return this.$streakBar.css({
-        "webkit-transform": "",
-        transform: "",
-        transition: `all ${this.STREAK_TIMEOUT}ms linear`,
-      });
+      this.$streakBar.style.transform = "";
+      return (this.$streakBar.style.transition = `all ${this.STREAK_TIMEOUT}ms linear`);
     });
   }
 
   showExclamation() {
-    const $exclamation = $("<span>")
-      .addClass("exclamation")
-      .text(_.sample(this.EXCLAMATIONS));
+    const $exclamation = document.createElement("span");
+    $exclamation.classList.add("exclamation");
+    $exclamation.textContent = _.sample(this.EXCLAMATIONS);
 
     this.$exclamations.prepend($exclamation);
     return setTimeout(() => $exclamation.remove(), 3000);
@@ -319,33 +316,33 @@ class App {
     const x = intensity * (Math.random() > 0.5 ? -1 : 1);
     const y = intensity * (Math.random() > 0.5 ? -1 : 1);
 
-    this.$editor.css("margin", `${y}px ${x}px`);
+    this.$editor.style.margin = `${y}px ${x}px`;
 
     return setTimeout(() => {
-      return this.$editor.css("margin", "");
+      return (this.$editor.style.margin = "");
     }, 75);
   }
 
   activatePowerMode() {
     this.powerMode = true;
-    return this.$body.addClass("power-mode");
+    return this.$body.classList.add("power-mode");
   }
 
   deactivatePowerMode() {
     this.powerMode = false;
-    return this.$body.removeClass("power-mode");
+    return this.$body.classList.remove("power-mode");
   }
 
   onClickInstructions() {
-    $("body").toggleClass("show-instructions");
-    if (!$("body").hasClass("show-instructions")) {
+    this.$body.classList.toggle("show-instructions");
+    if (!this.$body.classList.contains("show-instructions")) {
       return this.editor.focus();
     }
   }
 
   onClickReference() {
-    this.$reference.toggleClass("active");
-    if (!this.$reference.hasClass("active")) {
+    this.$reference.classList.toggle("active");
+    if (!this.$reference.classList.contains("active")) {
       return this.editor.focus();
     }
   }
@@ -357,8 +354,8 @@ WILL DISQUALIFY YOU. Are you sure you want to proceed? Type \"yes\" to confirm.\
 `);
 
     if ((confirm != null ? confirm.toLowerCase() : undefined) === "yes") {
-      this.$result[0].contentWindow.postMessage(this.editor.getValue(), "*");
-      return this.$result.show();
+      this.$result.contentWindow.postMessage(this.editor.getValue(), "*");
+      return (this.$result.style.display = "block");
     }
   }
 
@@ -386,4 +383,4 @@ WILL DISQUALIFY YOU. Are you sure you want to proceed? Type \"yes\" to confirm.\
 }
 App.initClass();
 
-$(() => new App());
+document.addEventListener("DOMContentLoaded", () => new App());
