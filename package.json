@@ -1,0 +1,18 @@
+{
+  "name": "code-in-the-dark",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^8.3.5"
+  },
+  "dependencies": {
+    "ace-builds": "^1.45.0",
+    "underscore": "^1.13.8"
+  }
+}

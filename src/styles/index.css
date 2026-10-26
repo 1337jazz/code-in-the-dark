@@ -1,6 +1,6 @@
 @font-face {
   font-family: "Press Start 2P";
-  src: url(../assets/fonts/PressStart2P-Regular.ttf) format("truetype");
+  src: url(/assets/fonts/PressStart2P-Regular.ttf) format("truetype");
 }
 
 body, html {
@@ -65,14 +65,14 @@ body.show-instructions .instructions-container {
   right: 0;
   z-index: 0;
   opacity: 0.5;
-  background-image: url(../assets/images/logo.png);
+  background-image: url(/assets/images/logo.png);
   background-position: 50% 50%;
   background-repeat: no-repeat;
   background-size: 520px 476px;
 }
 
 .power-mode .background {
-  background-image: url(../assets/images/logo-power.png);
+  background-image: url(/assets/images/logo-power.png);
   animation: background-power 2s infinite both;
 }
 
