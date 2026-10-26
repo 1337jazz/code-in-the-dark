@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Code in the Dark - Viewer</title>
+	<style>
+		body {
+			margin: 0;
+			background: black;
+		}
+
+		#screen {
+			display: block;
+			width: 100vw;
+			height: 100vh;
+			object-fit: contain;
+		}
+
+		#share {
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			padding: 1rem 2rem;
+			font-size: 1.5rem;
+		}
+
+		#preview {
+			position: fixed;
+			inset: 0;
+			width: 100%;
+			height: 100%;
+			border: 0;
+			background-color: white;
+			opacity: 0;
+			pointer-events: none;
+			transition: opacity 0.5s;
+		}
+
+		#preview.visible {
+			opacity: 1;
+		}
+	</style>
+</head>
+
+<body>
+	<video id="screen" autoplay muted></video>
+	<button id="share">Share editor window</button>
+	<iframe id="preview"></iframe>
+
+	<script>
+		const $screen = document.querySelector("#screen");
+		const $share = document.querySelector("#share");
+		const $preview = document.querySelector("#preview");
+
+		$share.addEventListener("click", async () => {
+			// Let the user pick the editor tab and play it in the video
+			const stream = await navigator.mediaDevices.getDisplayMedia({
+				video: {
+					width: {ideal: 3840},
+					height: {ideal: 2160},
+					frameRate: 60,
+					displaySurface: "browser",
+				},
+				monitorTypeSurfaces: "exclude",
+				selfBrowserSurface: "exclude",
+			});
+			// Prefer sharp text over smooth motion
+			stream.getVideoTracks()[0].contentHint = "detail";
+			$screen.srcObject = stream;
+			$share.hidden = true;
+
+			// Show the button again when sharing stops
+			stream.getVideoTracks()[0].addEventListener("ended", () => ($share.hidden = false));
+		});
+
+		// Fill the preview with the editor content and keep it updated
+		const updatePreview = () => ($preview.srcdoc = localStorage["content"] ?? "");
+		updatePreview();
+		window.addEventListener("storage", (e) => e.key === "content" && updatePreview());
+
+		// Switch between the editor and the preview every 10 seconds
+		setInterval(() => $preview.classList.toggle("visible"), 10 * 1000);
+	</script>
+</body>
+
+</html>

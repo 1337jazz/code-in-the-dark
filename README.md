@@ -27,7 +27,6 @@ Editor: `http://localhost:5173`. Preview: `http://localhost:5173/preview.html`.
 If you want, you could use the dev mode above to run a contest, but using the Docker image is recommended, plus you get a get a few extras:
 
 - A real web server, no need to to reference `*.html` files in the browser
-- Ability to set a password on the preview page (see below)
 
 Replace `public/assets/page.png` with the reference screenshot, add extra files to `public/assets/` and list them in `public/instructions.html`.
 
@@ -41,11 +40,3 @@ docker run --rm -p 8080:80 code-in-the-dark
 Editor: `http://localhost:8080`. Preview: `http://localhost:8080/preview`.
 
 Note: Without Docker, run `pnpm dev` as above. The preview needs the `.html`.
-
-### Preview password
-
-The preview page is always password protected. The username is `preview` and the default password is `secret`. To change the password, set the environment variable `PREVIEW_PASSWORD`. Don't use a `:` in it.
-
-```bash
-docker run --rm -p 8080:80 -e PREVIEW_PASSWORD=mypassword code-in-the-dark
-```
