@@ -9,10 +9,14 @@
 
 <body>
 	<iframe id="preview" frameborder="0"></iframe>
+	<button id="switch">Switch</button>
 	<script>
 
 		// Get the preview element
 		const $preview = document.querySelector("#preview");
+
+		// Get the switch button
+		const $switch = document.querySelector("#switch");
 
 		// Create a function to update the preview
 		const update = () => ($preview.srcdoc = localStorage["content"] ?? "");
@@ -22,6 +26,16 @@
 
 		// Begin listening for storage changes
 		window.addEventListener("storage", (e) => e.key === "content" && update());
+
+
+		// And add a click handler to the switch button
+		$switch.addEventListener("click", () => {
+			// switch back to the editor
+			location.href = "/";
+		});
+
+
+
 	</script>
 </body>
 
@@ -37,6 +51,16 @@
 		width: 100%;
 		height: 100vh;
 		border: 0;
+	}
+
+	#switch {
+		position: fixed;
+		bottom: 0;
+		right: 0;
+		padding: 1rem;
+		background: white;
+		border: 0;
+		z-index: 100;
 	}
 </style>
 

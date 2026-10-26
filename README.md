@@ -1,28 +1,51 @@
-# The official editor for [Code in the Dark](https://github.com/codeinthedark/codeinthedark.github.io)
-*Read more about the Code in the Dark competition [here](https://github.com/codeinthedark/codeinthedark.github.io)*
+# Code in the Dark editor
 
-![image](https://cloud.githubusercontent.com/assets/688415/11479175/f3aedfbe-9790-11e5-9ad9-ce930fe5a3a8.png)
+Editor for [Code in the Dark](https://github.com/codeinthedark/codeinthedark.github.io) contests, with a live preview page for the audience.
 
-**Try the editor online: http://codeinthedark.com/editor/**
+Fork of [codeinthedark/editor](https://github.com/codeinthedark/editor) by Tictail Inc, used under its BSD license ([LICENSE](LICENSE)).
 
-## How to Use
-* Grab the contents of the [`dist/`](https://github.com/codeinthedark/editor/tree/master/dist) folder, or download [this zip](https://github.com/codeinthedark/editor/releases/download/v0.1.0/editor.zip). All contestants should be given a copy of the editor.
-* Replace `assets/page.png` in the editor files with a screenshot of the page that is to be built in the competition. 
-* Add any extra assets (e.g. images) that are required to build the page in the `assets/` folder.
-* Edit the `assets/instructions.html` file with information about the extra assets and their dimensions.
+This is a re-write of the original editor, to use JavaScript instead of CoffeeScript, along with a few new features:
 
-## Developing
-Here's how to install the dependencies and run the editor locally:
+- Preview page - now the audience can optionally see the result of the competitors' code as they go along
+- Can be served from Nginx via Docker
+
+
+## Development
+
+You need to have [Node.js](https://nodejs.org/en/) and [pnpm](https://pnpm.io/) installed. You can then run the below commands to get started.
+
+
 ```bash
-$ npm install
-$ ./node_modules/.bin/gulp serve
+pnpm install
+pnpm dev
 ```
 
-To build the editor, run:
-```bash
-$ gulp dist
-```
-This will compile all scripts and styles and inline them into a single html file in the `dist/` folder. It will also create a `dist/assets/` folder, which separately contains the instructions and page screenshot so that they can easily be changed between different rounds of the competition.
+Editor: `http://localhost:5173`. Preview: `http://localhost:5173/preview.html`.
 
-## Contributing
-Contributions to the editor welcome. If you've fixed a bug or implemented a cool new feature that you would like to share, please feel free to open a pull request here.
+## Run a contest
+
+If you want, you could use the dev mode above to run a contest, but using the Docker image is recommended, plus you get a get a few extras:
+
+- A real web server, no need to to reference `*.html` files in the browser
+- Ability to set a password on the preview page (see below)
+
+Replace `public/assets/page.png` with the reference screenshot, add extra files to `public/assets/` and list them in `public/instructions.html`.
+
+With Docker:
+
+```bash
+docker build -t code-in-the-dark .
+docker run --rm -p 8080:80 code-in-the-dark
+```
+
+Editor: `http://localhost:8080`. Preview: `http://localhost:8080/preview`.
+
+Note: Without Docker, run `pnpm dev` as above. The preview needs the `.html`.
+
+### Preview password
+
+The preview page is always password protected. The username is `preview` and the default password is `secret`. To change the password, set the environment variable `PREVIEW_PASSWORD`. Don't use a `:` in it.
+
+```bash
+docker run --rm -p 8080:80 -e PREVIEW_PASSWORD=mypassword code-in-the-dark
+```
