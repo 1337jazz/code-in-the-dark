@@ -37,7 +37,6 @@ const $instructionsContainer = document.querySelector(".instructions-container")
 const $instructionsButton = document.querySelector(".instructions-button");
 const $reference = document.querySelector(".reference-screenshot-container");
 const $nameTag = document.querySelector(".name-tag");
-const $result = document.querySelector(".result");
 const $finish = document.querySelector(".finish-button");
 
 // ==================
@@ -73,6 +72,9 @@ $nameTag.addEventListener("click", () => getName(true));
 
 // First, get the name of the user if it's not already stored
 getName();
+
+// Clear the finished flag from a previous round
+localStorage.removeItem("finished");
 
 // Fires when the editor changes - this is the main event loop!
 function onChange(e) {
@@ -180,7 +182,8 @@ WILL DISQUALIFY YOU. Are you sure you want to proceed? Type \"yes\" to confirm.\
 `);
 
     if ((confirm != null ? confirm.toLowerCase() : undefined) === "yes") {
-        $result.contentWindow.postMessage(editor.getValue(), "*");
-        return ($result.style.display = "block");
+        localStorage["content"] = editor.getValue();
+        localStorage["finished"] = "true";
+        return location.replace("result.html");
     }
 }

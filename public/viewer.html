@@ -18,7 +18,7 @@
 			object-fit: contain;
 		}
 
-		#share {
+		#share-button {
 			position: fixed;
 			top: 50%;
 			left: 50%;
@@ -42,23 +42,109 @@
 		#preview.visible {
 			opacity: 1;
 		}
+
+		#preview-badge {
+			position: fixed;
+			top: 1rem;
+			right: 1rem;
+			padding: 0.5rem 1rem;
+			border-radius: 999px;
+			background: rgba(0, 0, 0, 0.7);
+			color: white;
+			font: bold 1.25rem sans-serif;
+			letter-spacing: 0.1em;
+			opacity: 0;
+			pointer-events: none;
+			transition: opacity 0.5s;
+		}
+
+		#preview.visible+#preview-badge {
+			opacity: 1;
+		}
+
+		#countdown {
+			position: fixed;
+			bottom: 1rem;
+			right: 1rem;
+			padding: 0.5rem 1rem;
+			border-radius: 999px;
+			background: rgba(0, 0, 0, 0.7);
+			color: white;
+			font: bold 1.25rem sans-serif;
+			pointer-events: none;
+		}
 	</style>
 </head>
 
 <body>
 	<video id="screen" autoplay muted></video>
-	<button id="share">Share editor window</button>
+	<button id="share-button">Share editor window</button>
 	<iframe id="preview"></iframe>
+	<div id="preview-badge">PREVIEW</div>
+	<div id="countdown" hidden></div>
 
 	<script>
 		const $screen = document.querySelector("#screen");
-		const $share = document.querySelector("#share");
+		const shareButton = document.querySelector("#share-button");
 		const $preview = document.querySelector("#preview");
+		const $countdown = document.querySelector("#countdown");
 
-		$share.addEventListener("click", async () => {
-			// Let the user pick the editor tab and play it in the video
+		// Show the editor for PREVIEW_TICK seconds, then the preview for PREVIEW_SECONDS seconds
+		const PREVIEW_TICK = 20;
+		const PREVIEW_SECONDS = 10;
+
+		let showPreviewTimeout;
+		let hidePreviewTimeout;
+		let screenStream;
+		let countdownInterval;
+		let countdownLabel;
+		let countdownEndsAt;
+
+		// Stop switching and show the editor video
+		const stopSwitching = () => {
+			clearTimeout(showPreviewTimeout);
+			clearTimeout(hidePreviewTimeout);
+			clearInterval(countdownInterval);
+			$preview.classList.remove("visible");
+			$countdown.hidden = true;
+		};
+
+		// Count down to the next switch
+		const startCountdown = (label, seconds) => {
+			countdownLabel = label;
+			countdownEndsAt = Date.now() + seconds * 1000;
+		};
+
+		// Write the remaining seconds into the countdown overlay
+		const renderCountdown = () => {
+			const secondsLeft = Math.max(0, Math.ceil((countdownEndsAt - Date.now()) / 1000));
+			$countdown.textContent = `${countdownLabel} ${secondsLeft}s`;
+		};
+
+		// Wait PREVIEW_TICK seconds, then show the preview
+		const scheduleNextPreview = () => {
+			startCountdown("Preview in", PREVIEW_TICK);
+			showPreviewTimeout = setTimeout(showPreview, PREVIEW_TICK * 1000);
+		};
+
+		// Show the preview and hide it again after PREVIEW_SECONDS
+		const showPreview = () => {
+			$preview.classList.add("visible");
+			startCountdown("Back to editor in", PREVIEW_SECONDS);
+			hidePreviewTimeout = setTimeout(hidePreview, PREVIEW_SECONDS * 1000);
+		};
+
+		const hidePreview = () => {
+			$preview.classList.remove("visible");
+			scheduleNextPreview();
+		};
+
+		shareButton.addEventListener("click", async () => {
+
+			// Open the browser share window
 			const stream = await navigator.mediaDevices.getDisplayMedia({
 				video: {
+					// try to get a 4k video
 					width: {ideal: 3840},
 					height: {ideal: 2160},
 					frameRate: 60,
@@ -69,20 +155,38 @@
 			});
 			// Prefer sharp text over smooth motion
 			stream.getVideoTracks()[0].contentHint = "detail";
+			screenStream = stream;
 			$screen.srcObject = stream;
-			$share.hidden = true;
+			shareButton.hidden = true;
 
-			// Show the button again when sharing stops
-			stream.getVideoTracks()[0].addEventListener("ended", () => ($share.hidden = false));
+			// Start the preview cycle while sharing
+			if (!localStorage["finished"]) {
+				scheduleNextPreview();
+				renderCountdown();
+				$countdown.hidden = false;
+				countdownInterval = setInterval(renderCountdown, 250);
+			}
+
+			// Stop switching and show the button again when sharing stops
+			stream.getVideoTracks()[0].addEventListener("ended", () => {
+				stopSwitching();
+				shareButton.hidden = false;
+			});
 		});
 
 		// Fill the preview with the editor content and keep it updated
 		const updatePreview = () => ($preview.srcdoc = localStorage["content"] ?? "");
 		updatePreview();
-		window.addEventListener("storage", (e) => e.key === "content" && updatePreview());
-
-		// Switch between the editor and the preview every 10 seconds
-		setInterval(() => $preview.classList.toggle("visible"), 10 * 1000);
+		window.addEventListener("storage", (e) => {
+			if (e.key === "content") {
+				updatePreview();
+			}
+			// Stop sharing and show the result when the contestant finishes
+			if (e.key === "finished" && e.newValue) {
+				screenStream?.getTracks().forEach((track) => track.stop());
+				location.replace("result.html");
+			}
+		});
 	</script>
 </body>
 

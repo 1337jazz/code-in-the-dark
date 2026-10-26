@@ -5,15 +5,11 @@
     <title></title>
   </head>
   <body>
-      <script>
-        window.addEventListener('message', function(e) {
-          if (
-            window.location.origin === 'file://' ||
-            window.location.origin === (e.origin || e.originalEvent.origin)
-          ) {
-            document.documentElement.innerHTML = e.data
-          }
-        })
-      </script>
+    <script>
+      // Replace this page with the saved editor content
+      document.open();
+      document.write(localStorage["content"] ?? "");
+      document.close();
+    </script>
   </body>
 </html>
