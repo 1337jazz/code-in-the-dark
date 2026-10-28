@@ -10,8 +10,9 @@ From the [original Github repository](https://github.com/codeinthedark/codeinthe
 > where each contestant compete to implement a website design given only a screenshot. The catch is that no previews of the results are 
 > allowed during the implementation, and no measuring tools can be used. The winner is decided by the audience.
 
+## Premise
 This is a rewrite (or refactor, perhaps) of the original editor, using JavaScript instead of the original CoffeeScript,
-which was achieved with the great [decaffeinate](https://decaffeinate-project.org) project.
+which was achieved with the great [decaffeinate](https://decaffeinate-project.org) project. The main new feature is the viewer - see below. 
 
 A lot of effort was put into making the code base clearer (at least for me) with liberal use of comments and some code splitting;
 however, a deliberate attempt was made not to change too much in order to keep the original spirit of the code base. It's not
