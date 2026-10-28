@@ -1,14 +1,21 @@
-// ------> Contest settings, rebuild the Docker image after changing these!!!!
+// =============================================================================
+// =============================================================================
+// ==                                                                         ==
+// ==   CONTEST SETTINGS                                                      ==
+// ==   Rebuild the Docker image after changing these!!!!                     ==
+// ==                                                                         ==
+// =============================================================================
+// =============================================================================
 
 // ========================
 // ======== VIEWER ========
 // ========================
 
 // How many seconds between each preview
-export const PREVIEW_TICK = 5;
+export const PREVIEW_TICK = 10;
 
 // How many seconds to show the preview for
-export const PREVIEW_SECONDS = 100;
+export const PREVIEW_SECONDS = 5;
 
 // Seconds after the last change before the viewer reloads the preview - lower = faster refresh, but higher flicker
 // in testing 0.1 seems to be fine
