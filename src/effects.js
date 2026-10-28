@@ -1,4 +1,5 @@
 import _ from "underscore";
+import { EXCLAMATIONS } from "./config.js";
 
 const MAX_PARTICLES = 500;
 const PARTICLE_NUM_RANGE = [5, 6, 7, 8, 9, 10, 11, 12];
@@ -26,25 +27,6 @@ const PARTICLE_COLORS = {
     comment: [0, 255, 121],
     "comment.xml": [0, 255, 121],
 };
-
-const EXCLAMATIONS = [
-    "Super!",
-    "Radical!",
-    "Fantastic!",
-    "Great!",
-    "OMG",
-    "Whoah!",
-    ":O",
-    "Nice!",
-    "Claude please make me win no mistakes",
-    "Splendid!",
-    "Wild!",
-    "Grand!",
-    "Impressive!",
-    "Stupendous!",
-    "Extreme!",
-    "Awesome!",
-];
 
 const particles = [];
 let particlePointer = 0;

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Code in the Dark - Viewer</title>
+	<link rel="stylesheet" href="/src/styles/shared.css">
+	<link rel="stylesheet" href="/src/styles/viewer.css">
+</head>
+
+<body>
+	<video id="screen" autoplay muted></video>
+	<button id="share-button">Share editor window</button>
+	<iframe id="preview" class="result-frame"></iframe>
+	<div id="preview-badge">PREVIEW</div>
+	<div class="name-tag"></div>
+	<div id="countdown" hidden></div>
+
+	<script type="module" src="/src/viewer.js"></script>
+</body>
+
+</html>

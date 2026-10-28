@@ -3,6 +3,8 @@ import ace from "ace-builds";
 import "ace-builds/src-noconflict/mode-html";
 import "ace-builds/src-noconflict/theme-vibrant_ink";
 import "ace-builds/src-noconflict/ext-searchbox";
+import { CONTENT_KEY } from "./storage.js";
+import { EDITOR_FONT_SIZE } from "./config.js";
 
 const debouncedSaveContent = _.debounce(saveContent, 300);
 
@@ -16,7 +18,7 @@ function setupAce() {
 
   editor.setShowPrintMargin(false);
   editor.setHighlightActiveLine(false);
-  editor.setFontSize(20);
+  editor.setFontSize(EDITOR_FONT_SIZE);
   editor.setTheme("ace/theme/vibrant_ink");
   editor.getSession().setMode("ace/mode/html");
   editor.session.setOption("useWorker", false);
@@ -28,14 +30,14 @@ function setupAce() {
 
 function loadContent() {
   let content;
-  if (!(content = localStorage["content"])) {
+  if (!(content = localStorage[CONTENT_KEY])) {
     return;
   }
   return editor.setValue(content, -1);
 }
 
 function saveContent() {
-  return (localStorage["content"] = editor.getValue());
+  return (localStorage[CONTENT_KEY] = editor.getValue());
 }
 
 function getCursorPosition() {
