@@ -37,18 +37,18 @@ const $streakBar = document.querySelector(".streak-container .bar");
 const $exclamations = document.querySelector(".streak-container .exclamations");
 const $editor = document.querySelector("#editor");
 
-const canvas = setupCanvas();
-const canvasContext = canvas.getContext("2d");
+const $canvas = setupCanvas();
+const canvasContext = $canvas.getContext("2d");
 
 if (typeof window.requestAnimationFrame === "function") {
     window.requestAnimationFrame(onFrame);
 }
 
 function setupCanvas() {
-    const canvas = document.querySelector(".canvas-overlay");
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    return canvas;
+    const $canvas = document.querySelector(".canvas-overlay");
+    $canvas.width = window.innerWidth;
+    $canvas.height = window.innerHeight;
+    return $canvas;
 }
 
 function onFrame(time) {
@@ -118,7 +118,7 @@ function createParticle(x, y, color) {
 }
 
 function drawParticles(timeDelta) {
-    canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+    canvasContext.clearRect(0, 0, $canvas.width, $canvas.height);
 
     return (() => {
         const result = [];

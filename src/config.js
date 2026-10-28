@@ -1,28 +1,43 @@
-// Contest settings, rebuild the Docker image after changing these
+// ------> Contest settings, rebuild the Docker image after changing these!!!!
 
-// ==== Viewer ====
-// Seconds the viewer shows the editor before each preview
+// ========================
+// ======== VIEWER ========
+// ========================
+
+// How many seconds between each preview
 export const PREVIEW_TICK = 20;
-// Seconds the viewer shows each preview
+
+// How many seconds to show the preview for
 export const PREVIEW_SECONDS = 10;
-// Requested screen share size and frame rate
+
+// Scrreen share size and frame rate (maybe just leave these alone unless something is broken)
 export const SCREEN_SHARE_WIDTH = 3840;
 export const SCREEN_SHARE_HEIGHT = 2160;
 export const SCREEN_SHARE_FRAME_RATE = 60;
 
-// ==== Editor ====
-// Ask for confirmation before leaving the editor page
-export const WARN_BEFORE_LEAVING = false;
+// ========================
+// ==== EDITOR SETTINGS ===
+// ========================
+
+export const WARN_BEFORE_LEAVING = true;
 export const EDITOR_FONT_SIZE = 20;
 
-// ==== Game ====
-// Milliseconds without typing before the streak ends
-export const STREAK_TIMEOUT = 10 * 1000;
+// ========================
+// ==== GAME SETTINGS  ====
+// ========================
+
+// Seconds without typing before the streak ends
+export const STREAK_TIMEOUT = 10;
+
 // Streak length that turns on power mode
-export const POWER_MODE_ACTIVATION_THRESHOLD = 1;
+export const POWER_MODE_ACTIVATION_THRESHOLD = 200;
+
 // Show an exclamation every this many characters
 export const EXCLAMATION_EVERY = 10;
+
+// Exclamations that pop up - add as many as you like, a random one is chosen every EXCLAMATION_EVERY times
 export const EXCLAMATIONS = [
+  "10x developer unlocked!!",
   "Super!",
   "Radical!",
   "Fantastic!",

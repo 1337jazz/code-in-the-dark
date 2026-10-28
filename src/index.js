@@ -11,7 +11,7 @@ let currentStreak = 0;
 let powerMode = false;
 
 // Setup debounced and throttled functions
-const debouncedEndStreak = _.debounce(endStreak, STREAK_TIMEOUT);
+const debouncedEndStreak = _.debounce(endStreak, STREAK_TIMEOUT * 1000);
 const throttledShake = _.throttle(shake, 100, { trailing: false });
 const throttledSpawnParticles = _.throttle(spawnParticles, 25, { trailing: false });
 
@@ -22,20 +22,24 @@ const $instructionsContainer = document.querySelector(".instructions-container")
 const $instructionsButton = document.querySelector(".instructions-button");
 const $reference = document.querySelector(".reference-screenshot-container");
 const $nameTag = document.querySelector(".name-tag");
-const $finish = document.querySelector(".finish-button");
+const $finishButton = document.querySelector(".finish-button");
 
 // ==================
 // ====  Events ====
 // ==================
+//
 // Fires when the editor changes - i.e. on each keystroke
 editor.getSession().on("change", onChange);
 
 // Fires when the user tries to leave the page, if enabled
 if (WARN_BEFORE_LEAVING) {
   window.addEventListener("beforeunload", (e) => {
-    e.preventDefault();
+    if (!localStorage[FINISHED_KEY]) {
+      e.preventDefault();
+    }
   });
 }
+
 // Fires when the user clicks the instructions overlay
 $instructionsContainer.addEventListener("click", onClickInstructions);
 
@@ -46,7 +50,7 @@ $instructionsButton.addEventListener("click", onClickInstructions);
 $reference.addEventListener("click", onClickReference);
 
 // Fires when the user clicks the finish button
-$finish.addEventListener("click", onClickFinish);
+$finishButton.addEventListener("click", onClickFinish);
 
 // Fires when the user clicks the name tag
 $nameTag.addEventListener("click", () => getName(true));
@@ -113,7 +117,7 @@ function increaseStreak() {
   }
 
   // Add more time to the streak bar
-  refreshStreakBar(STREAK_TIMEOUT);
+  refreshStreakBar(STREAK_TIMEOUT * 1000);
 
   // Update the streak counter
   return renderStreak(currentStreak);
