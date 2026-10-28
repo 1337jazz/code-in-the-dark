@@ -72,10 +72,6 @@ docker run --rm -p 8080:80 code-in-the-dark
 
 Then go to `http://localhost:8080` to view the app.
 
-#### Stopping the container
-
-Run `make stop` or `docker rm -f code-in-the-dark`
-
 ### During a round
 
 If you don't want live previews for the audience, you're done. Otherwise:
@@ -105,6 +101,10 @@ pnpm dev
 Then go to `http://localhost:5173` to view the app.
 
 `example.html` is a small sample page (navbar, hero and cards). Copy and paste it into the editor to have something to test with.
+
+#### Stopping the container
+
+When you're done, clean up by running `make stop` or `docker rm -f code-in-the-dark`
 
 ## Contributing
 
