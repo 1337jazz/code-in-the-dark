@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Example</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      color: #222;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      background: #1e1e2f;
+      color: white;
+    }
+
+    .navbar ul {
+      display: flex;
+      gap: 24px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+    }
+
+    .hero {
+      padding: 100px 40px;
+      text-align: center;
+      background: linear-gradient(135deg, #6a5acd, #00bcd4);
+      color: white;
+    }
+
+    .hero h1 {
+      margin: 0 0 16px;
+      font-size: 48px;
+    }
+
+    .hero button {
+      margin-top: 24px;
+      padding: 12px 32px;
+      border: none;
+      border-radius: 4px;
+      background: white;
+      color: #6a5acd;
+      font-size: 16px;
+    }
+
+    .cards {
+      display: flex;
+      gap: 24px;
+      padding: 60px 40px;
+    }
+
+    .card {
+      flex: 1;
+      padding: 24px;
+      border-radius: 8px;
+      background: #f4f4f8;
+    }
+
+    .card h2 {
+      margin-top: 0;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <strong>Brand</strong>
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <h1>Welcome to the dark</h1>
+    <p>Build this page as fast as you can.</p>
+    <button>Get started</button>
+  </section>
+
+  <section class="cards">
+    <div class="card">
+      <h2>Fast</h2>
+      <p>Type quickly and keep your streak alive.</p>
+    </div>
+    <div class="card">
+      <h2>Blind</h2>
+      <p>No previews, only the reference screenshot.</p>
+    </div>
+    <div class="card">
+      <h2>Fun</h2>
+      <p>Most important of all, have fun.</p>
+    </div>
+  </section>
+</body>
+</html>
