@@ -13,7 +13,8 @@ body {
 	position: relative;
 }
 
-button {
+button,
+.viewer-button {
 	font-family: "Press Start 2P", sans-serif;
 	appearance: none;
 	background-color: #3A9364;
@@ -212,6 +213,14 @@ body.power-mode #editor .ace_entity.ace_other.ace_attribute-name {
 
 .reset-button {
 	background-color: indianred;
+	float: right;
+	margin-right: 10px;
+}
+
+.viewer-button {
+	background-color: midnightblue;
+	text-decoration: none;
+	color: white;
 	float: right;
 	margin-right: 10px;
 }
