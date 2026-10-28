@@ -10,9 +10,6 @@ From the [original Github repository](https://github.com/codeinthedark/codeinthe
 > where each contestant compete to implement a website design given only a screenshot. The catch is that no previews of the results are 
 > allowed during the implementation, and no measuring tools can be used. The winner is decided by the audience.
 
-During the competition, the contestants have to use our custom editor for Code in the Dark, which [you can try out here](http://codeinthedark.com/editor).
-
-
 This is a rewrite (or refactor, perhaps) of the original editor, using JavaScript instead of the original CoffeeScript,
 which was achieved with the great [decaffeinate](https://decaffeinate-project.org) project.
 
