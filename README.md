@@ -1,7 +1,5 @@
 # Code in the Dark editor
 
-Editor for [Code in the Dark](https://github.com/codeinthedark/codeinthedark.github.io) contests, with a live preview page for the audience.
-
 Fork of [codeinthedark/editor](https://github.com/codeinthedark/editor) by Tictail Inc, used under its BSD license ([LICENSE](LICENSE)).
 
 This is a re-write of the original editor, to use JavaScript instead of CoffeeScript, along with a few new features:
@@ -20,7 +18,7 @@ pnpm install
 pnpm dev
 ```
 
-Editor: `http://localhost:5173`. Preview: `http://localhost:5173/preview.html`.
+Editor: `http://localhost:5173`. Viewer: `http://localhost:5173/viewer.html`.
 
 ## Run a contest
 
@@ -37,6 +35,6 @@ docker build -t code-in-the-dark .
 docker run --rm -p 8080:80 code-in-the-dark
 ```
 
-Editor: `http://localhost:8080`. Preview: `http://localhost:8080/preview`.
+Editor: `http://localhost:8080`. Viewer: `http://localhost:8080/viewer`.
 
-Note: Without Docker, run `pnpm dev` as above. The preview needs the `.html`.
+Note: Without Docker, run `pnpm dev` as above. The viewer needs the `.html`.

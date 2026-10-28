@@ -5,6 +5,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Code in the Dark - Viewer</title>
+	<link rel="stylesheet" href="/styles/overlay.css">
 	<style>
 		body {
 			margin: 0;
@@ -62,6 +63,16 @@
 			opacity: 1;
 		}
 
+		.name-tag {
+			opacity: 0;
+			pointer-events: none;
+			transition: opacity 0.5s;
+		}
+
+		#preview.visible~.name-tag {
+			opacity: 1;
+		}
+
 		#countdown {
 			position: fixed;
 			bottom: 1rem;
@@ -81,6 +92,7 @@
 	<button id="share-button">Share editor window</button>
 	<iframe id="preview"></iframe>
 	<div id="preview-badge">PREVIEW</div>
+	<div class="name-tag"></div>
 	<div id="countdown" hidden></div>
 
 	<script>
@@ -177,9 +189,18 @@
 		// Fill the preview with the editor content and keep it updated
 		const updatePreview = () => ($preview.srcdoc = localStorage["content"] ?? "");
 		updatePreview();
+
+		// Fill the name tag and keep it updated
+		const $nameTag = document.querySelector(".name-tag");
+		const updateName = () => ($nameTag.textContent = localStorage["name"] ?? "");
+		updateName();
+
 		window.addEventListener("storage", (e) => {
 			if (e.key === "content") {
 				updatePreview();
+			}
+			if (e.key === "name") {
+				updateName();
 			}
 			// Stop sharing and show the result when the contestant finishes
 			if (e.key === "finished" && e.newValue) {

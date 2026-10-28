@@ -51,10 +51,10 @@ if (WARN_BEFORE_LEAVING) {
         e.preventDefault();
     });
 }
-// Fires when the user clicks the reference image
+// Fires when the user clicks the instructions overlay
 $instructionsContainer.addEventListener("click", onClickInstructions);
 
-// Fires when the user clicks the name tag
+// Fires when the user clicks the instructions button
 $instructionsButton.addEventListener("click", onClickInstructions);
 
 // Fires when the user clicks the reference image
