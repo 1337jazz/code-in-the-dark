@@ -23,6 +23,7 @@ const $instructionsButton = document.querySelector(".instructions-button");
 const $reference = document.querySelector(".reference-screenshot-container");
 const $nameTag = document.querySelector(".name-tag");
 const $finishButton = document.querySelector(".finish-button");
+const $resetButton = document.querySelector(".reset-button");
 
 // ==================
 // ====  Events ====
@@ -33,11 +34,7 @@ editor.getSession().on("change", onChange);
 
 // Fires when the user tries to leave the page, if enabled
 if (WARN_BEFORE_LEAVING) {
-  window.addEventListener("beforeunload", (e) => {
-    if (!localStorage[FINISHED_KEY]) {
-      e.preventDefault();
-    }
-  });
+  window.addEventListener("beforeunload", onBeforeUnload);
 }
 
 // Fires when the user clicks the instructions overlay
@@ -51,6 +48,9 @@ $reference.addEventListener("click", onClickReference);
 
 // Fires when the user clicks the finish button
 $finishButton.addEventListener("click", onClickFinish);
+
+// Fires when the user clicks the reset button
+$resetButton.addEventListener("click", onClickReset);
 
 // Fires when the user clicks the name tag
 $nameTag.addEventListener("click", () => getName(true));
@@ -172,6 +172,23 @@ WILL DISQUALIFY YOU. Are you sure you want to proceed? Type \"yes\" to confirm.\
   if ((confirm != null ? confirm.toLowerCase() : undefined) === "yes") {
     localStorage[CONTENT_KEY] = editor.getValue();
     localStorage[FINISHED_KEY] = "true";
+    window.removeEventListener("beforeunload", onBeforeUnload);
     return location.replace("result");
   }
+}
+
+// onClickReset will clear all relevant localstorage keys and reload to a fresh state for the next contestant
+function onClickReset() {
+  if (confirm("!!! THIS WILL PERMANENTLY CLEAR THE EDITOR AND RESET THE NAME !!!. Are you sure?")) {
+    editor.setValue("");
+    localStorage.removeItem(CONTENT_KEY);
+    localStorage.removeItem(NAME_KEY);
+    window.removeEventListener("beforeunload", onBeforeUnload); // So we don't get the annoying popup again
+    return location.reload();
+  }
+}
+
+// Ask the browser to warn before leaving the page
+function onBeforeUnload(e) {
+  e.preventDefault();
 }

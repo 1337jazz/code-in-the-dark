@@ -210,6 +210,12 @@ body.power-mode #editor .ace_entity.ace_other.ace_attribute-name {
 	margin-left: 10px;
 }
 
+.reset-button {
+	background-color: indianred;
+	float: right;
+	margin-right: 10px;
+}
+
 .instructions-button {
 	float: right;
 }
