@@ -56,6 +56,23 @@
 	font-size: 56px;
 }
 
+.back-button {
+	text-decoration: none;
+	position: absolute;
+	z-index: 40;
+	bottom: 20px;
+	right: 20px;
+	padding: 2px 4px;
+	font-family: "Press Start 2P", sans-serif;
+	color: rgba(58, 147, 100, 0.75);
+	font-size: 16px;
+}
+
+.back-button:hover {
+	background: rgba(58, 147, 100, 0.75);
+	color: white;
+}
+
 .result-frame {
 	position: fixed;
 	inset: 0;
