@@ -5,10 +5,14 @@
 // ========================
 
 // How many seconds between each preview
-export const PREVIEW_TICK = 20;
+export const PREVIEW_TICK = 5;
 
 // How many seconds to show the preview for
-export const PREVIEW_SECONDS = 10;
+export const PREVIEW_SECONDS = 100;
+
+// Seconds after the last change before the viewer reloads the preview - lower = faster refresh, but higher flicker
+// in testing 0.1 seems to be fine
+export const RENDER_DELAY = 0.1;
 
 // Scrreen share size and frame rate (maybe just leave these alone unless something is broken)
 export const SCREEN_SHARE_WIDTH = 3840;
@@ -19,6 +23,7 @@ export const SCREEN_SHARE_FRAME_RATE = 60;
 // ==== EDITOR SETTINGS ===
 // ========================
 
+// Weather or not to warn before a browser refresh during the contest. Keep this true in a real contest, but nice to leave off in dev
 export const WARN_BEFORE_LEAVING = true;
 export const EDITOR_FONT_SIZE = 20;
 

@@ -1,4 +1,3 @@
-import _ from "underscore";
 import ace from "ace-builds";
 import "ace-builds/src-noconflict/mode-html";
 import "ace-builds/src-noconflict/theme-vibrant_ink";
@@ -6,12 +5,10 @@ import "ace-builds/src-noconflict/ext-searchbox";
 import { CONTENT_KEY } from "./storage.js";
 import { EDITOR_FONT_SIZE } from "./config.js";
 
-const debouncedSaveContent = _.debounce(saveContent, 300);
-
 const editor = setupAce();
 loadContent();
 editor.focus();
-editor.getSession().on("change", debouncedSaveContent);
+editor.getSession().on("change", saveContent);
 
 function setupAce() {
   const editor = ace.edit("editor");

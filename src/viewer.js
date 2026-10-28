@@ -1,5 +1,6 @@
+import _ from "underscore";
 import { CONTENT_KEY, NAME_KEY, FINISHED_KEY } from "./storage.js";
-import { PREVIEW_TICK, PREVIEW_SECONDS, SCREEN_SHARE_WIDTH, SCREEN_SHARE_HEIGHT, SCREEN_SHARE_FRAME_RATE } from "./config.js";
+import { PREVIEW_TICK, PREVIEW_SECONDS, RENDER_DELAY, SCREEN_SHARE_WIDTH, SCREEN_SHARE_HEIGHT, SCREEN_SHARE_FRAME_RATE } from "./config.js";
 
 // ==================
 // == DOM Elements ==
@@ -15,6 +16,9 @@ const $nameTag = document.querySelector(".name-tag");
 // ==================
 let countdownInterval;
 let switchAt;
+
+// Setup debounced functions
+const debouncedRender = _.debounce(render, RENDER_DELAY * 1000);
 
 // ==================
 // ====  Events ====
@@ -104,5 +108,5 @@ function onStorageChange(e) {
   }
 
   // Otherwise the content or the name changed, so update the page
-  render();
+  debouncedRender();
 }
