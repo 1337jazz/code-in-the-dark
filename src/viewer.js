@@ -1,6 +1,15 @@
 import _ from "underscore";
 import { CONTENT_KEY, NAME_KEY, FINISHED_KEY } from "./storage.js";
-import { PREVIEW_TICK, PREVIEW_SECONDS, RENDER_DELAY, SCREEN_SHARE_WIDTH, SCREEN_SHARE_HEIGHT, SCREEN_SHARE_FRAME_RATE } from "./config.js";
+import {
+  ENABLE_PREVIEW,
+  PREVIEW_TICK,
+  PREVIEW_SECONDS,
+  MAX_PREVIEWS,
+  RENDER_DELAY,
+  SCREEN_SHARE_WIDTH,
+  SCREEN_SHARE_HEIGHT,
+  SCREEN_SHARE_FRAME_RATE,
+} from "./config.js";
 
 // ==================
 // == DOM Elements ==
@@ -16,6 +25,7 @@ const $nameTag = document.querySelector(".name-tag");
 // ==================
 let countdownInterval;
 let switchAt;
+let previewCount = 0;
 
 // Setup debounced functions
 const debouncedRender = _.debounce(render, RENDER_DELAY * 1000);
@@ -59,7 +69,7 @@ async function onClickShare() {
   $shareButton.hidden = true;
 
   // Start the preview cycle while sharing
-  if (!localStorage[FINISHED_KEY]) {
+  if (ENABLE_PREVIEW && previewCount < MAX_PREVIEWS && !localStorage[FINISHED_KEY]) {
     switchAt = Date.now() + PREVIEW_TICK * 1000;
     tick();
     $countdown.hidden = false;
@@ -88,13 +98,21 @@ function stopSwitching() {
 
 // Switch between the editor and the preview when the time is up, then update the countdown
 function tick() {
+  let showingPreview = $preview.classList.contains("visible");
+
   if (Date.now() >= switchAt) {
-    const showingPreview = $preview.classList.toggle("visible");
+    // Stop switching once the last preview has finished
+    if (showingPreview && previewCount >= MAX_PREVIEWS) {
+      return stopSwitching();
+    }
+
+    showingPreview = $preview.classList.toggle("visible");
+    if (showingPreview) previewCount++;
     switchAt = Date.now() + (showingPreview ? PREVIEW_SECONDS : PREVIEW_TICK) * 1000;
   }
 
   // Update the UI
-  const label = $preview.classList.contains("visible") ? "Back to editor in" : "Preview in";
+  const label = showingPreview ? "Back to editor in" : "Preview in";
   const secondsLeft = Math.ceil((switchAt - Date.now()) / 1000);
   $countdown.textContent = `${label} ${secondsLeft}s`;
 }

@@ -11,11 +11,18 @@
 // ======== VIEWER ========
 // ========================
 
+// Whether to enable previews in the viewer (sharing the screen still works)
+export const ENABLE_PREVIEW = true;
+
 // How many seconds between each preview
-export const PREVIEW_TICK = 10;
+export const PREVIEW_TICK = 180; // 3 mins
 
 // How many seconds to show the preview for
-export const PREVIEW_SECONDS = 5;
+export const PREVIEW_SECONDS = 10;
+
+// How many previews to show in total before the viewer only shows the
+// editor use "Infinity" for unlimited
+export const MAX_PREVIEWS = 3;
 
 // Seconds after the last change before the viewer reloads the preview - lower = faster refresh, but higher flicker
 // in testing 0.1 seems to be fine
