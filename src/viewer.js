@@ -1,5 +1,5 @@
 import _ from "underscore";
-import { CONTENT_KEY, NAME_KEY, FINISHED_KEY } from "./storage.js";
+import { CONTENT_KEY, NAME_KEY, FINISHED_KEY, STARTED_KEY } from "./storage.js";
 import {
   ENABLE_PREVIEW,
   PREVIEW_TICK,
@@ -18,6 +18,8 @@ const $screen = document.querySelector("#screen");
 const $shareButton = document.querySelector("#share-button");
 const $preview = document.querySelector("#preview");
 const $countdown = document.querySelector("#countdown");
+const $countdownLabel = document.querySelector("#countdown-label");
+const $previewCount = document.querySelector("#preview-count");
 const $nameTag = document.querySelector(".name-tag");
 
 // ==================
@@ -69,16 +71,12 @@ async function onClickShare() {
   $shareButton.hidden = true;
 
   // Start the preview cycle while sharing
-  if (ENABLE_PREVIEW && previewCount < MAX_PREVIEWS && !localStorage[FINISHED_KEY]) {
-    switchAt = Date.now() + PREVIEW_TICK * 1000;
-    tick();
-    $countdown.hidden = false;
-    countdownInterval = setInterval(tick, 250);
-  }
+  if (localStorage[STARTED_KEY]) startCycle();
 
   // Listen for when sharing stops and stop switching (also show the button again)
   stream.getVideoTracks()[0].addEventListener("ended", () => {
     stopSwitching();
+    $screen.srcObject = null;
     $shareButton.hidden = false;
   });
 }
@@ -89,7 +87,17 @@ function render() {
   $nameTag.textContent = localStorage[NAME_KEY] ?? "";
 }
 
-// Stop switching and show the editor video
+// Start switching between the editor and the preview
+function startCycle() {
+  if (!ENABLE_PREVIEW || previewCount >= MAX_PREVIEWS || localStorage[FINISHED_KEY]) return;
+
+  clearInterval(countdownInterval);
+  switchAt = Date.now() + PREVIEW_TICK * 1000;
+  tick();
+  $countdown.hidden = false;
+  countdownInterval = setInterval(tick, 250);
+}
+
 function stopSwitching() {
   clearInterval(countdownInterval);
   $preview.classList.remove("visible");
@@ -112,9 +120,11 @@ function tick() {
   }
 
   // Update the UI
-  const label = showingPreview ? "Back to editor in" : "Preview in";
+  const label = showingPreview ? "Back to editor in" : `Preview ${previewCount + 1} of ${MAX_PREVIEWS} in`;
   const secondsLeft = Math.ceil((switchAt - Date.now()) / 1000);
-  $countdown.textContent = `${label} ${secondsLeft}s`;
+  $countdownLabel.textContent = `${label} ${secondsLeft}s`;
+  $previewCount.textContent = `${previewCount}/${MAX_PREVIEWS}`;
+  $previewCount.hidden = !showingPreview;
 }
 
 // React to changes the editor makes to localStorage
@@ -123,6 +133,17 @@ function onStorageChange(e) {
   if (e.key === FINISHED_KEY && e.newValue) {
     $screen.srcObject?.getTracks().forEach((track) => track.stop());
     return location.replace("result.html");
+  }
+
+  // When the contestant clicks start while sharing, start the preview cycle
+  if (e.key === STARTED_KEY && e.newValue === "true" && $screen.srcObject) {
+    return startCycle();
+  }
+
+  // When the contestant resets, stop the preview cycle and reset the preview count
+  if (e.key === STARTED_KEY && e.newValue === null) {
+    previewCount = 0;
+    return stopSwitching();
   }
 
   // Otherwise the content or the name changed, so update the page

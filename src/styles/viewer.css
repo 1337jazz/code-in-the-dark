@@ -56,6 +56,14 @@ body {
 	bottom: 1rem;
 }
 
+#preview-count {
+	margin-left: 0.5rem;
+	padding: 0.1rem 0.6rem;
+	border-radius: 999px;
+	background: rgba(255, 255, 255, 0.2);
+	font-size: 0.9em;
+}
+
 .name-tag {
 	opacity: 0;
 	pointer-events: none;
