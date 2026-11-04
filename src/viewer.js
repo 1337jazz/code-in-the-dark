@@ -132,7 +132,7 @@ function onStorageChange(e) {
   // When the contestant is finished, stop sharing and show the result
   if (e.key === FINISHED_KEY && e.newValue) {
     $screen.srcObject?.getTracks().forEach((track) => track.stop());
-    return location.replace("result.html");
+    return location.replace("result");
   }
 
   // When the contestant clicks start while sharing, start the preview cycle
