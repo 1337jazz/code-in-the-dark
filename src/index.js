@@ -233,7 +233,7 @@ function onClickReset() {
     localStorage.removeItem(FINISHED_KEY);
     localStorage.removeItem(HEAT_KEY);
     window.removeEventListener("beforeunload", onBeforeUnload); // So we don't get the annoying popup again
-    return location.reload();
+    return location.replace("/");
   }
 }
 
