@@ -1,7 +1,7 @@
 import _ from "underscore";
 import { editor, getCursorPosition } from "./editor.js";
 import { renderStreak, refreshStreakBar, showExclamation, burstParticles, shakeEditor, setPowerMode } from "./effects.js";
-import { CONTENT_KEY, NAME_KEY, FINISHED_KEY } from "./storage.js";
+import { CONTENT_KEY, NAME_KEY, FINISHED_KEY, STARTED_KEY } from "./storage.js";
 import { STREAK_TIMEOUT, POWER_MODE_ACTIVATION_THRESHOLD, EXCLAMATION_EVERY, WARN_BEFORE_LEAVING } from "./config.js";
 
 // ==================
@@ -22,6 +22,8 @@ const $instructionsContainer = document.querySelector(".instructions-container")
 const $instructionsButton = document.querySelector(".instructions-button");
 const $reference = document.querySelector(".reference-screenshot-container");
 const $nameTag = document.querySelector(".name-tag");
+const $startOverlay = document.querySelector(".start-overlay");
+const $startButton = document.querySelector(".start-button");
 const $finishButton = document.querySelector(".finish-button");
 const $resetButton = document.querySelector(".reset-button");
 
@@ -49,6 +51,9 @@ $reference.addEventListener("click", onClickReference);
 // Fires when the user clicks the finish button
 $finishButton.addEventListener("click", onClickFinish);
 
+// Fires when the user clicks the start button
+$startButton.addEventListener("click", onClickStart);
+
 // Fires when the user clicks the reset button
 $resetButton.addEventListener("click", onClickReset);
 
@@ -59,11 +64,25 @@ $nameTag.addEventListener("click", () => getName(true));
 // ========================= ENTRY POINT =======================================
 // =============================================================================
 
+// Don't show the overlay unless we haven't started
+if (localStorage[STARTED_KEY] == "true") {
+  $startOverlay.style.display = "none";
+} else {
+  editor.setReadOnly(true);
+}
+
 // First, get the name of the user if it's not already stored
 getName();
 
 // Clear the finished flag from a previous round
 localStorage.removeItem(FINISHED_KEY);
+
+function onClickStart() {
+  $startOverlay.style.display = "none";
+  localStorage[STARTED_KEY] = true;
+  editor.setReadOnly(false);
+  editor.focus();
+}
 
 // Fires when the editor changes - this is the main event loop!
 function onChange(e) {
@@ -183,6 +202,8 @@ function onClickReset() {
     editor.setValue("");
     localStorage.removeItem(CONTENT_KEY);
     localStorage.removeItem(NAME_KEY);
+    localStorage.removeItem(STARTED_KEY);
+    localStorage.removeItem(FINISHED_KEY);
     window.removeEventListener("beforeunload", onBeforeUnload); // So we don't get the annoying popup again
     return location.reload();
   }
