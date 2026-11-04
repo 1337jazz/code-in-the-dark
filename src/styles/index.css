@@ -37,6 +37,15 @@ body {
 		font-size: 16px !important;
 	}
 
+	.heat-select {
+		width: 200px !important;
+		font-size: 12px !important;
+	}
+
+	.button-container-start .viewer-button {
+		width: 200px !important;
+	}
+
 }
 
 .button-container-start {
@@ -54,6 +63,37 @@ body {
 .start-button {
 	width: 300px;
 	font-size: 20px;
+}
+
+.heat-select {
+	width: 300px;
+	box-sizing: border-box;
+	font-family: "Press Start 2P", sans-serif;
+	font-size: 14px;
+	padding: 10px 40px 10px 15px;
+	appearance: none;
+	background: black url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M0 0h12L6 8z' fill='white'/%3E%3C/svg%3E") no-repeat right 15px center;
+	color: white;
+	border: 2px solid #3A9364;
+	border-radius: 0;
+	cursor: pointer;
+}
+
+.button-container-start .viewer-button {
+	width: 300px;
+	box-sizing: border-box;
+	text-align: center;
+	margin-right: 0;
+}
+
+.heat-select:focus {
+	outline: none;
+	border-color: #5FD39A;
+}
+
+.heat-select option {
+	background: black;
+	color: white;
 }
 
 button,
