@@ -8,6 +8,21 @@
 // =============================================================================
 
 // ========================
+// ======== HEATS =========
+// ========================
+
+// One entry per heat, each id must match a folder in public/heats/
+// Note, the heat id can be whatever you want, e.g. "A", "One" etc - AS LONG AS IT MATCHES THE FOLDER NAME above!!!
+// Note, the name can also be whatever you want e.g. "League 1", "Ola's team" etc
+export const HEATS = [
+  { id: "1", name: "Heat 1" },
+  { id: "2", name: "Heat 2" },
+  { id: "3", name: "Heat 3" },
+  { id: "4", name: "Heat 4" },
+  { id: "5", name: "Heat 5" },
+];
+
+// ========================
 // ======== VIEWER ========
 // ========================
 

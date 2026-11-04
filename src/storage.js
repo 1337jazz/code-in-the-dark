@@ -3,3 +3,4 @@ export const CONTENT_KEY = "content";
 export const NAME_KEY = "name";
 export const FINISHED_KEY = "finished";
 export const STARTED_KEY = "started";
+export const HEAT_KEY = "heat";
