@@ -1,8 +1,8 @@
 import _ from "underscore";
 import { editor, getCursorPosition } from "./editor.js";
 import { renderStreak, refreshStreakBar, showExclamation, burstParticles, shakeEditor, setPowerMode } from "./effects.js";
-import { CONTENT_KEY, NAME_KEY, FINISHED_KEY, STARTED_KEY } from "./storage.js";
-import { STREAK_TIMEOUT, POWER_MODE_ACTIVATION_THRESHOLD, EXCLAMATION_EVERY, WARN_BEFORE_LEAVING } from "./config.js";
+import { CONTENT_KEY, NAME_KEY, FINISHED_KEY, STARTED_KEY, HEAT_KEY } from "./storage.js";
+import { HEATS, STREAK_TIMEOUT, POWER_MODE_ACTIVATION_THRESHOLD, EXCLAMATION_EVERY, WARN_BEFORE_LEAVING } from "./config.js";
 
 // ==================
 // ====  Globals ====
@@ -21,6 +21,9 @@ const throttledSpawnParticles = _.throttle(spawnParticles, 25, { trailing: false
 const $instructionsContainer = document.querySelector(".instructions-container");
 const $instructionsButton = document.querySelector(".instructions-button");
 const $reference = document.querySelector(".reference-screenshot-container");
+const $referenceScreenshot = document.querySelector(".reference-screenshot");
+const $instructions = document.querySelector(".instructions");
+const $heatSelect = document.querySelector(".heat-select");
 const $nameTag = document.querySelector(".name-tag");
 const $startOverlay = document.querySelector(".start-overlay");
 const $startButton = document.querySelector(".start-button");
@@ -64,9 +67,13 @@ $nameTag.addEventListener("click", () => getName(true));
 // ========================= ENTRY POINT =======================================
 // =============================================================================
 
+// Fill the heat dropdown from the config
+fillHeatSelect();
+
 // Don't show the overlay unless we haven't started
 if (localStorage[STARTED_KEY] == "true") {
   $startOverlay.style.display = "none";
+  applyHeat(localStorage[HEAT_KEY]);
 } else {
   editor.setReadOnly(true);
 }
@@ -78,10 +85,30 @@ getName();
 localStorage.removeItem(FINISHED_KEY);
 
 function onClickStart() {
+  // Hide the start overlay
   $startOverlay.style.display = "none";
+
+  // Set the heat's image and instructions
+  localStorage[HEAT_KEY] = $heatSelect.value;
+  applyHeat($heatSelect.value);
+
+  // Start!
   localStorage[STARTED_KEY] = true;
   editor.setReadOnly(false);
   editor.focus();
+}
+
+// Add one option per heat to the dropdown on the start page
+function fillHeatSelect() {
+  for (const heat of HEATS) {
+    $heatSelect.add(new Option(heat.name, heat.id));
+  }
+}
+
+// Point the reference image and instructions at the heat's folder
+function applyHeat(id) {
+  $referenceScreenshot.style.backgroundImage = `url(/heats/${id}/reference.png)`;
+  $instructions.src = `/heats/${id}/instructions.html`;
 }
 
 // Fires when the editor changes - this is the main event loop!
@@ -204,6 +231,7 @@ function onClickReset() {
     localStorage.removeItem(NAME_KEY);
     localStorage.removeItem(STARTED_KEY);
     localStorage.removeItem(FINISHED_KEY);
+    localStorage.removeItem(HEAT_KEY);
     window.removeEventListener("beforeunload", onBeforeUnload); // So we don't get the annoying popup again
     return location.reload();
   }
