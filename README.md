@@ -35,7 +35,7 @@ To run a contest, you need either:
 
 For development you need Node.js and pnpm.
 
-A Makefile is also provided to alias the pnpm and docker commands, so you may also want `make` (install it with your package manager).
+A Makefile is also provided to alias the pnpm and docker commands, so you may also want `make` (install it with your package manager of choice).
 
 ## Run a contest
 
