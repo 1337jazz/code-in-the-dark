@@ -32,6 +32,12 @@ const LASER_COLORS = [
 ];
 const LASER_ALPHA_FADEOUT = 0.88; // applied every frame after the bounce
 
+// Burst mode: lasers fly out in every direction and bounce around before fading
+const LASER_BURST_NUM_RANGE = [12, 13, 14, 15, 16]; // lasers per burst
+const LASER_BURST_ANGLE_RANGE = [0, 360];
+const LASER_BURST_MAX_BOUNCES = 4; // edge bounces before fading
+const LASER_BURST_ALPHA_FADEOUT = 0.95; // applied every frame after the last bounce
+
 const PARTICLE_COLORS = {
     text: [255, 255, 255],
     "text.xml": [255, 255, 255],
@@ -175,15 +181,23 @@ function randomInRange([min, max]) {
 
 // type is the token type, not used for now since lasers pick from LASER_COLORS
 function fireLaser(x, y, type) {
-    _(_(LASER_NUM_RANGE).sample()).times(() => createLaser(x, y));
+    _(_(LASER_NUM_RANGE).sample()).times(() =>
+        createLaser(x, y, LASER_ANGLE_RANGE, 1, LASER_ALPHA_FADEOUT),
+    );
 }
 
-function createLaser(x, y) {
+function fireLaserBurst(x, y) {
+    _(_(LASER_BURST_NUM_RANGE).sample()).times(() =>
+        createLaser(x, y, LASER_BURST_ANGLE_RANGE, LASER_BURST_MAX_BOUNCES, LASER_BURST_ALPHA_FADEOUT),
+    );
+}
+
+function createLaser(x, y, angleRange, maxBounces, fadeout) {
     if (lasers.length >= MAX_LASERS) {
         lasers.shift();
     }
 
-    const angle = (randomInRange(LASER_ANGLE_RANGE) * Math.PI) / 180;
+    const angle = (randomInRange(angleRange) * Math.PI) / 180;
     const speed = randomInRange(LASER_SPEED_RANGE);
     const start = { x, y: y + 10 };
 
@@ -195,7 +209,9 @@ function createLaser(x, y) {
         width: randomInRange(LASER_WIDTH_RANGE),
         color: _(LASER_COLORS).sample(),
         alpha: 1,
-        bounced: false,
+        bounces: 0,
+        maxBounces,
+        fadeout,
     });
 }
 
@@ -204,20 +220,24 @@ function moveLaser(laser) {
     head.x += velocity.x;
     head.y += velocity.y;
 
-    // Bounce once off the first edge hit, then start fading
-    if (!laser.bounced) {
-        if (head.x >= $canvas.width) {
-            head.x = $canvas.width;
+    // Bounce off the edges until maxBounces is reached, then start fading
+    if (laser.bounces < laser.maxBounces) {
+        let hit = false;
+        if (head.x <= 0 || head.x >= $canvas.width) {
+            head.x = Math.min(Math.max(head.x, 0), $canvas.width);
             velocity.x = -velocity.x;
-            laser.bounced = true;
+            hit = true;
         }
         if (head.y <= 0 || head.y >= $canvas.height) {
             head.y = Math.min(Math.max(head.y, 0), $canvas.height);
             velocity.y = -velocity.y;
-            laser.bounced = true;
+            hit = true;
+        }
+        if (hit) {
+            laser.bounces++;
         }
     } else {
-        laser.alpha *= LASER_ALPHA_FADEOUT;
+        laser.alpha *= laser.fadeout;
     }
 
     laser.trail.push({ ...head });
@@ -280,6 +300,7 @@ export {
     showExclamation,
     burstParticles,
     fireLaser,
+    fireLaserBurst,
     shakeEditor,
     setPowerMode,
 };
