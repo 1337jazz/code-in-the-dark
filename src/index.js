@@ -1,8 +1,8 @@
 import _ from "underscore";
 import { editor, getCursorPosition } from "./editor.js";
-import { renderStreak, refreshStreakBar, showExclamation, burstParticles, shakeEditor, setPowerMode } from "./effects.js";
+import { renderStreak, refreshStreakBar, showExclamation, burstParticles, fireLaser, shakeEditor, setPowerMode } from "./effects.js";
 import { CONTENT_KEY, NAME_KEY, FINISHED_KEY, STARTED_KEY, HEAT_KEY } from "./storage.js";
-import { HEATS, STREAK_TIMEOUT, POWER_MODE_ACTIVATION_THRESHOLD, EXCLAMATION_EVERY, WARN_BEFORE_LEAVING } from "./config.js";
+import { HEATS, STREAK_TIMEOUT, POWER_MODE_ACTIVATION_THRESHOLD, LASER_MODE_ACTIVATION_THRESHOLD, EXCLAMATION_EVERY, WARN_BEFORE_LEAVING } from "./config.js";
 
 // ==================
 // ====  Globals ====
@@ -14,6 +14,7 @@ let powerMode = false;
 const debouncedEndStreak = _.debounce(endStreak, STREAK_TIMEOUT * 1000);
 const throttledShake = _.throttle(shake, 100, { trailing: false });
 const throttledSpawnParticles = _.throttle(spawnParticles, 25, { trailing: false });
+const throttledSpawnLaser = _.throttle(spawnLaser, 50, { trailing: false });
 
 // ==================
 // == DOM Elements ==
@@ -133,6 +134,9 @@ function onChange(e) {
 
   // Spawn particles if there is at least one token, and we're in power mode
   return _.defer(() => {
+    if (token && currentStreak >= LASER_MODE_ACTIVATION_THRESHOLD) {
+      throttledSpawnLaser(token.type);
+    }
     if (token && powerMode) {
       return throttledSpawnParticles(token.type);
     }
@@ -193,6 +197,11 @@ function shake() {
 function spawnParticles(type) {
   const { x, y } = getCursorPosition();
   return burstParticles(x, y, type);
+}
+
+function spawnLaser(type) {
+  const { x, y } = getCursorPosition();
+  return fireLaser(x, y, type);
 }
 
 function onClickInstructions() {

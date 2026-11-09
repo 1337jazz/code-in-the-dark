@@ -19,7 +19,7 @@ export const HEATS = [
   { id: "2", name: "Heat 2" },
   { id: "3", name: "Heat 3" },
   { id: "4", name: "Heat 4" },
-  { id: "5", name: "Heat 5" },
+  { id: "5", name: "Final" },
 ];
 
 // ========================
@@ -30,14 +30,14 @@ export const HEATS = [
 export const ENABLE_PREVIEW = true;
 
 // How many seconds between each preview
-export const PREVIEW_TICK = 180; // 3 mins
+export const PREVIEW_TICK = 300; // 5 mins
 
 // How many seconds to show the preview for
-export const PREVIEW_SECONDS = 10;
+export const PREVIEW_SECONDS = 5;
 
 // How many previews to show in total before the viewer only shows the
 // editor use "Infinity" for unlimited
-export const MAX_PREVIEWS = 3;
+export const MAX_PREVIEWS = 2;
 
 // Seconds after the last change before the viewer reloads the preview - lower = faster refresh, but higher flicker
 // in testing 0.1 seems to be fine
@@ -64,7 +64,10 @@ export const EDITOR_FONT_SIZE = 20;
 export const STREAK_TIMEOUT = 10;
 
 // Streak length that turns on power mode
-export const POWER_MODE_ACTIVATION_THRESHOLD = 200;
+export const POWER_MODE_ACTIVATION_THRESHOLD = 100;
+
+// Streak length that starts shooting lasers to the right of the cursor
+export const LASER_MODE_ACTIVATION_THRESHOLD = 200;
 
 // Show an exclamation every this many characters
 export const EXCLAMATION_EVERY = 10;
