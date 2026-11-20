@@ -135,7 +135,7 @@ function onChange(e) {
   // Spawn particles if there is at least one token, and we're in power mode
   return _.defer(() => {
     if (LASER_MODE === "stream" && token && currentStreak >= LASER_MODE_ACTIVATION_THRESHOLD) {
-      throttledSpawnLaser(token.type);
+      throttledSpawnLaser();
     }
     if (token && powerMode) {
       return throttledSpawnParticles(token.type);
@@ -205,9 +205,9 @@ function spawnParticles(type) {
   return burstParticles(x, y, type);
 }
 
-function spawnLaser(type) {
+function spawnLaser() {
   const { x, y } = getCursorPosition();
-  return fireLaser(x, y, type);
+  return fireLaser(x, y);
 }
 
 function spawnLaserBurst() {

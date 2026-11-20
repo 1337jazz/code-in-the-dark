@@ -180,8 +180,7 @@ function randomInRange([min, max]) {
     return min + Math.random() * (max - min);
 }
 
-// type is the token type, not used for now since lasers pick from LASER_COLORS
-function fireLaser(x, y, type) {
+function fireLaser(x, y) {
     _(_(LASER_NUM_RANGE).sample()).times(() =>
         createLaser(x, y, LASER_ANGLE_RANGE, 1, LASER_ALPHA_FADEOUT),
     );
