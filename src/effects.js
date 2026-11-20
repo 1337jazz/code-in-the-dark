@@ -12,13 +12,14 @@ const PARTICLE_VELOCITY_RANGE = {
 };
 
 const MAX_LASERS = 30;
-const LASER_ANGLE_RANGE = [-90, 90]; // degrees from straight right, negative is up
-const LASER_SPEED_RANGE = [18, 30]; // pixels per frame
-const LASER_NUM_RANGE = [2, 3, 4]; // lasers fired per shot
-const LASER_LENGTH_RANGE = [10, 22]; // number of trail points
+const LASER_ANGLE_RANGE = [-90, 90];                // degrees from straight right, negative is up
+const LASER_SPEED_RANGE = [18, 30];                 // pixels per frame
+const LASER_NUM_RANGE = [2, 3, 4];                  // lasers fired per shot
+const LASER_LENGTH_RANGE = [10, 22];                // number of trail points
 const LASER_WIDTH_RANGE = [5, 12];
 const LASER_GLOW = 25;
-const LASER_CORE_WIDTH = 0.35; // white core, as a share of the laser width
+const LASER_CORE_WIDTH = 0.35;                      // white core, as a share of the laser width
+
 // Neon colors, a random one is picked for each laser
 const LASER_COLORS = [
     [255, 0, 85],
@@ -30,13 +31,13 @@ const LASER_COLORS = [
     [200, 60, 255],
     [255, 60, 200],
 ];
-const LASER_ALPHA_FADEOUT = 0.88; // applied every frame after the bounce
+const LASER_ALPHA_FADEOUT = 0.88;                   // applied every frame after the bounce
 
 // Burst mode: lasers fly out in every direction and bounce around before fading
 const LASER_BURST_NUM_RANGE = [12, 13, 14, 15, 16]; // lasers per burst
 const LASER_BURST_ANGLE_RANGE = [0, 360];
-const LASER_BURST_MAX_BOUNCES = 4; // edge bounces before fading
-const LASER_BURST_ALPHA_FADEOUT = 0.95; // applied every frame after the last bounce
+const LASER_BURST_MAX_BOUNCES = 4;                  // edge bounces before fading
+const LASER_BURST_ALPHA_FADEOUT = 0.95;             // applied every frame after the last bounce
 
 const PARTICLE_COLORS = {
     text: [255, 255, 255],

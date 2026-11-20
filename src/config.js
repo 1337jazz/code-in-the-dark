@@ -69,7 +69,7 @@ export const POWER_MODE_ACTIVATION_THRESHOLD = 100;
 // Streak length that starts shooting lasers to the right of the cursor
 export const LASER_MODE_ACTIVATION_THRESHOLD = 200;
 
-// "stream" - lasers shoot from the cursor on every keystroke (iteration 1)
+// "stream" - lasers shoot from the cursor on every keystroke
 // "burst"  - a burst of lasers bounces around the screen, at the threshold and every LASER_BURST_EVERY after
 export const LASER_MODE = "burst";
 
