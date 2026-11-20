@@ -11,6 +11,34 @@ const PARTICLE_VELOCITY_RANGE = {
     y: [-7, -3.5],
 };
 
+const MAX_LASERS = 30;
+const LASER_ANGLE_RANGE = [-90, 90];                // degrees from straight right, negative is up
+const LASER_SPEED_RANGE = [18, 30];                 // pixels per frame
+const LASER_NUM_RANGE = [2, 3, 4];                  // lasers fired per shot
+const LASER_LENGTH_RANGE = [10, 22];                // number of trail points
+const LASER_WIDTH_RANGE = [5, 12];
+const LASER_GLOW = 25;
+const LASER_CORE_WIDTH = 0.35;                      // white core, as a share of the laser width
+
+// Neon colors, a random one is picked for each laser
+const LASER_COLORS = [
+    [255, 0, 85],
+    [255, 140, 0],
+    [255, 230, 0],
+    [0, 255, 120],
+    [0, 221, 255],
+    [80, 120, 255],
+    [200, 60, 255],
+    [255, 60, 200],
+];
+const LASER_ALPHA_FADEOUT = 0.88;                   // applied every frame after the bounce
+
+// Burst mode: lasers fly out in every direction and bounce around before fading
+const LASER_BURST_NUM_RANGE = [12, 13, 14, 15, 16]; // lasers per burst
+const LASER_BURST_ANGLE_RANGE = [0, 360];
+const LASER_BURST_MAX_BOUNCES = 4;                  // edge bounces before fading
+const LASER_BURST_ALPHA_FADEOUT = 0.95;             // applied every frame after the last bounce
+
 const PARTICLE_COLORS = {
     text: [255, 255, 255],
     "text.xml": [255, 255, 255],
@@ -30,6 +58,7 @@ const PARTICLE_COLORS = {
 
 const particles = [];
 let particlePointer = 0;
+const lasers = [];
 let lastDraw = 0;
 
 const $streakCounter = document.querySelector(".streak-container .counter");
@@ -53,6 +82,7 @@ function setupCanvas() {
 
 function onFrame(time) {
     drawParticles(time - lastDraw);
+    drawLasers();
     lastDraw = time;
     return typeof window.requestAnimationFrame === "function"
         ? window.requestAnimationFrame(onFrame)
@@ -146,6 +176,109 @@ function drawParticles(timeDelta) {
     })();
 }
 
+function randomInRange([min, max]) {
+    return min + Math.random() * (max - min);
+}
+
+function fireLaser(x, y) {
+    _(_(LASER_NUM_RANGE).sample()).times(() =>
+        createLaser(x, y, LASER_ANGLE_RANGE, 1, LASER_ALPHA_FADEOUT),
+    );
+}
+
+function fireLaserBurst(x, y) {
+    _(_(LASER_BURST_NUM_RANGE).sample()).times(() =>
+        createLaser(x, y, LASER_BURST_ANGLE_RANGE, LASER_BURST_MAX_BOUNCES, LASER_BURST_ALPHA_FADEOUT),
+    );
+}
+
+function createLaser(x, y, angleRange, maxBounces, fadeout) {
+    if (lasers.length >= MAX_LASERS) {
+        lasers.shift();
+    }
+
+    const angle = (randomInRange(angleRange) * Math.PI) / 180;
+    const speed = randomInRange(LASER_SPEED_RANGE);
+    const start = { x, y: y + 10 };
+
+    lasers.push({
+        head: { ...start },
+        trail: [start],
+        velocity: { x: Math.cos(angle) * speed, y: Math.sin(angle) * speed },
+        length: Math.round(randomInRange(LASER_LENGTH_RANGE)),
+        width: randomInRange(LASER_WIDTH_RANGE),
+        color: _(LASER_COLORS).sample(),
+        alpha: 1,
+        bounces: 0,
+        maxBounces,
+        fadeout,
+    });
+}
+
+function moveLaser(laser) {
+    const { head, velocity } = laser;
+    head.x += velocity.x;
+    head.y += velocity.y;
+
+    // Bounce off the edges until maxBounces is reached, then start fading
+    if (laser.bounces < laser.maxBounces) {
+        let hit = false;
+        if (head.x <= 0 || head.x >= $canvas.width) {
+            head.x = Math.min(Math.max(head.x, 0), $canvas.width);
+            velocity.x = -velocity.x;
+            hit = true;
+        }
+        if (head.y <= 0 || head.y >= $canvas.height) {
+            head.y = Math.min(Math.max(head.y, 0), $canvas.height);
+            velocity.y = -velocity.y;
+            hit = true;
+        }
+        if (hit) {
+            laser.bounces++;
+        }
+    } else {
+        laser.alpha *= laser.fadeout;
+    }
+
+    laser.trail.push({ ...head });
+    if (laser.trail.length > laser.length) {
+        laser.trail.shift();
+    }
+}
+
+function drawLasers() {
+    for (let i = lasers.length - 1; i >= 0; i--) {
+        const laser = lasers[i];
+        moveLaser(laser);
+
+        if (laser.alpha <= 0.05) {
+            lasers.splice(i, 1);
+            continue;
+        }
+
+        const color = laser.color.join(", ");
+        canvasContext.save();
+        canvasContext.strokeStyle = `rgba(${color}, ${laser.alpha})`;
+        canvasContext.shadowColor = `rgba(${color}, ${laser.alpha})`;
+        canvasContext.shadowBlur = LASER_GLOW;
+        canvasContext.lineWidth = laser.width;
+        canvasContext.lineCap = "round";
+        canvasContext.lineJoin = "round";
+        canvasContext.beginPath();
+        laser.trail.forEach((point, index) =>
+            index === 0 ? canvasContext.moveTo(point.x, point.y) : canvasContext.lineTo(point.x, point.y),
+        );
+        canvasContext.stroke();
+
+        // Bright white core on top of the colored beam
+        canvasContext.shadowBlur = 0;
+        canvasContext.strokeStyle = `rgba(255, 255, 255, ${laser.alpha})`;
+        canvasContext.lineWidth = laser.width * LASER_CORE_WIDTH;
+        canvasContext.stroke();
+        canvasContext.restore();
+    }
+}
+
 function shakeEditor(intensity) {
     const x = intensity * (Math.random() > 0.5 ? -1 : 1);
     const y = intensity * (Math.random() > 0.5 ? -1 : 1);
@@ -166,6 +299,8 @@ export {
     refreshStreakBar,
     showExclamation,
     burstParticles,
+    fireLaser,
+    fireLaserBurst,
     shakeEditor,
     setPowerMode,
 };
